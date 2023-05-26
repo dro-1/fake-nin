@@ -36,6 +36,14 @@ const personSchema = new Schema({
     type: String,
     required: true,
   },
+  stateOfOrigin: {
+    type: String,
+    required: true,
+  },
+  lgaOfOrigin: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Person", personSchema);

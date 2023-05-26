@@ -6,4 +6,10 @@ const sanitizePerson = (person) => ({
   gender: person.gender,
   address: person.address,
   imageUrl: person.imageUrl,
+  stateOfOrigin: person.stateOfOrigin,
+  lgaOfOrigin: person.lgaOfOrigin,
 });
+
+module.exports = {
+  sanitizePerson,
+};

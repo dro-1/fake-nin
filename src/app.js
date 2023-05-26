@@ -19,7 +19,7 @@ app.post(
 
 app.post("/getPerson", middlewares.checkTokens, personController.getPerson);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 dbConnector(() => {
   app.listen(PORT, () => {

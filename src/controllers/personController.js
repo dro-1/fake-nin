@@ -1,5 +1,6 @@
 const Person = require("../models/person");
 const axios = require("axios");
+const { sanitizePerson } = require("../utils/utils");
 
 const createPerson = async (req, res) => {
   const {
@@ -74,7 +75,7 @@ const getPerson = async (req, res) => {
   } else {
     return res.status(404).send({
       status: "Failed",
-      message: "Person not found",
+      message: "This NIN and password combination does not exist",
     });
   }
 };
