@@ -10,6 +10,18 @@ const sanitizePerson = (person) => ({
   lgaOfOrigin: person.lgaOfOrigin,
 });
 
+const sanitizeState = (state) => ({
+  name: state.name,
+  lgas: state.lgas,
+});
+
+const sanitizeLGA = (lga) => ({
+  name: lga.name,
+  state: lga.state,
+});
+
 module.exports = {
   sanitizePerson,
+  sanitizeState,
+  sanitizeLGA,
 };

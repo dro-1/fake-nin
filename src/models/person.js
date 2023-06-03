@@ -37,13 +37,17 @@ const personSchema = new Schema({
     required: true,
   },
   stateOfOrigin: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "State",
     required: true,
   },
   lgaOfOrigin: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "LGA",
     required: true,
   },
 });
 
-module.exports = mongoose.model("Person", personSchema);
+module.exports = {
+  Person: mongoose.model("Person", personSchema),
+};
