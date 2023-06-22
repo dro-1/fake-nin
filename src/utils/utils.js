@@ -16,6 +16,7 @@ const sanitizeState = (state) => ({
 });
 
 const sanitizePopulatedState = (state) => ({
+  id: state.id,
   name: state.name,
   lgas: state.lgas.map(sanitizeLGA),
 });
