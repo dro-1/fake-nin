@@ -15,6 +15,11 @@ const sanitizeState = (state) => ({
   lgas: state.lgas,
 });
 
+const sanitizePopulatedState = (state) => ({
+  name: state.name,
+  lgas: state.lgas.map(sanitizeLGA),
+});
+
 const sanitizeLGA = (lga) => ({
   name: lga.name,
   state: lga.state,
@@ -24,4 +29,5 @@ module.exports = {
   sanitizePerson,
   sanitizeState,
   sanitizeLGA,
+  sanitizePopulatedState,
 };

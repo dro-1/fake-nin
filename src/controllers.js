@@ -1,7 +1,7 @@
 const { Person } = require("./models/person");
 const { snakeCase } = require("snake-case");
 const axios = require("axios");
-const { sanitizePerson } = require("./utils/utils");
+const { sanitizePerson, sanitizePopulatedState } = require("./utils/utils");
 const { LGA } = require("./models/lga");
 const { sanitizeState, sanitizeLGA } = require("./utils/utils");
 const { State } = require("./models/state");
@@ -41,7 +41,7 @@ const createPerson = async (req, res) => {
 
   let searchedState;
   try {
-    searchedState = await State.findById(state);
+    searchedState = await State.findOne({ name: state });
   } catch (e) {
     console.log(e);
     return res.status(500).send({
@@ -58,7 +58,7 @@ const createPerson = async (req, res) => {
 
   let searchedLga;
   try {
-    searchedLga = await LGA.findById(lga);
+    searchedLga = await LGA.findOne({ name: lga, state: searchedState.id });
   } catch (e) {
     console.log(e);
     return res.status(500).send({
@@ -70,7 +70,7 @@ const createPerson = async (req, res) => {
   if (!searchedLga)
     return res.status(404).send({
       status: "Failed",
-      message: "LGA does not exist",
+      message: "LGA does not exist under the state",
     });
 
   let person = new Person({
@@ -192,6 +192,8 @@ const createStates = async (req, res) => {
 const getState = async (req, res) => {
   let { state } = req.params;
 
+  console.log(state);
+
   if (!state)
     return res.status(404).send({
       status: "Failed",
@@ -220,6 +222,30 @@ const getState = async (req, res) => {
   res.status(200).send({
     status: "Success",
     state: sanitizeState(searchedState),
+  });
+};
+
+const getStates = async (req, res) => {
+  let states;
+  try {
+    states = await State.find({}).populate("lgas");
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({
+      status: "Failed",
+      message: "Something went wrong. Please try again",
+    });
+  }
+
+  if (!states)
+    return res.status(404).send({
+      status: "Failed",
+      message: "State does not exist",
+    });
+
+  res.status(200).send({
+    status: "Success",
+    states: states.map(sanitizePopulatedState),
   });
 };
 
@@ -256,11 +282,14 @@ const createLGA = async (req, res) => {
     state: searchedState.id,
   });
 
+  searchedState.lgas.push(lga.id);
+
   try {
     await lga.save();
+    await searchedState.save();
     return res.status(201).send({
       status: "Successful",
-      message: "LGA created successfully",
+      message: `LGA created successfully in ${searchedState.name}`,
     });
   } catch (e) {
     console.log(e);
@@ -312,7 +341,7 @@ const createLGAs = async (req, res) => {
     await state.save();
     return res.status(201).send({
       status: "Successful",
-      message: "LGAs created successfully",
+      message: `LGAs created successfully in ${state.name}`,
     });
   } catch (e) {
     console.log(e);
@@ -365,5 +394,6 @@ module.exports = {
   createLGA,
   createLGAs,
   getState,
+  getStates,
   getLGA,
 };

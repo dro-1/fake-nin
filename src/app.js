@@ -21,6 +21,8 @@ app.post("/states", middlewares.checkTokens, controllers.createStates);
 
 app.get("/state/:state", middlewares.checkTokens, controllers.getState);
 
+app.get("/states", middlewares.checkTokens, controllers.getStates);
+
 app.post("/lga", middlewares.checkTokens, controllers.createLGA);
 
 app.post("/lgas", middlewares.checkTokens, controllers.createLGAs);

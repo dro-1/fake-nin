@@ -37,13 +37,11 @@ const personSchema = new Schema({
     required: true,
   },
   stateOfOrigin: {
-    type: Schema.Types.ObjectId,
-    ref: "State",
+    type: String,
     required: true,
   },
   lgaOfOrigin: {
-    type: Schema.Types.ObjectId,
-    ref: "LGA",
+    type: String,
     required: true,
   },
 });
